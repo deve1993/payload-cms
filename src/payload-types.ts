@@ -71,6 +71,13 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    categories: Category;
+    tags: Tag;
+    posts: Post;
+    menus: Menu;
+    forms: Form;
+    'form-submissions': FormSubmission;
+    redirects: Redirect;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +89,13 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    menus: MenusSelect<false> | MenusSelect<true>;
+    forms: FormsSelect<false> | FormsSelect<true>;
+    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -91,8 +105,14 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'it' | 'cs') | ('en' | 'it' | 'cs')[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    header: Header;
+    footer: Footer;
+  };
+  globalsSelect: {
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+  };
   locale: 'en' | 'it' | 'cs';
   user: User & {
     collection: 'users';
@@ -336,6 +356,454 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  name: string;
+  slug: string;
+  description?: string | null;
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  name: string;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  slug: string;
+  /**
+   * Breve descrizione dell'articolo (usata nelle anteprime)
+   */
+  excerpt?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  featuredImage?: (string | null) | Media;
+  category?: (string | null) | Category;
+  tags?: (string | Tag)[] | null;
+  author?: (string | null) | User;
+  publishedAt?: string | null;
+  status?: ('draft' | 'published' | 'scheduled') | null;
+  /**
+   * Ottimizzazione per i motori di ricerca
+   */
+  seo?: {
+    /**
+     * Titolo che appare nei risultati di ricerca (50-60 caratteri)
+     */
+    metaTitle?: string | null;
+    /**
+     * Descrizione che appare nei risultati di ricerca (150-160 caratteri)
+     */
+    metaDescription?: string | null;
+    /**
+     * Parole chiave separate da virgola (opzionale)
+     */
+    metaKeywords?: string | null;
+    /**
+     * Immagine per la condivisione sui social (1200x630px consigliato)
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * URL canonico se diverso da quello predefinito
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Impedisce ai motori di ricerca di indicizzare questa pagina
+     */
+    noIndex?: boolean | null;
+    /**
+     * Impedisce ai motori di ricerca di seguire i link in questa pagina
+     */
+    noFollow?: boolean | null;
+    /**
+     * Dati strutturati per rich snippets (opzionale)
+     */
+    structuredData?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "menus".
+ */
+export interface Menu {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  /**
+   * Nome identificativo del menu (es. Menu Principale, Menu Footer)
+   */
+  name: string;
+  location: 'header' | 'footer' | 'sidebar' | 'mobile';
+  items?:
+    | {
+        label: string;
+        linkType?: ('internal' | 'external') | null;
+        internalLink?: (string | null) | Page;
+        externalLink?: string | null;
+        openInNewTab?: boolean | null;
+        /**
+         * Nome icona (es. home, info, mail)
+         */
+        icon?: string | null;
+        submenu?:
+          | {
+              label: string;
+              linkType?: ('internal' | 'external') | null;
+              internalLink?: (string | null) | Page;
+              externalLink?: string | null;
+              openInNewTab?: boolean | null;
+              /**
+               * Descrizione opzionale per mega menu
+               */
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms".
+ */
+export interface Form {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  /**
+   * Nome identificativo del form
+   */
+  title: string;
+  slug: string;
+  fields?:
+    | {
+        fieldType:
+          | 'text'
+          | 'email'
+          | 'phone'
+          | 'textarea'
+          | 'number'
+          | 'checkbox'
+          | 'select'
+          | 'radio'
+          | 'file'
+          | 'date'
+          | 'datetime'
+          | 'hidden';
+        /**
+         * Nome tecnico del campo (senza spazi)
+         */
+        name: string;
+        /**
+         * Etichetta mostrata all'utente
+         */
+        label: string;
+        placeholder?: string | null;
+        required?: boolean | null;
+        width?: ('full' | 'half' | 'third' | 'twoThirds') | null;
+        defaultValue?: string | null;
+        options?:
+          | {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
+        rows?: number | null;
+        min?: number | null;
+        max?: number | null;
+        allowedFileTypes?: ('images' | 'pdf' | 'documents' | 'spreadsheets' | 'archives')[] | null;
+        maxFileSize?: number | null;
+        /**
+         * Puoi usare link per termini e condizioni
+         */
+        checkboxLabel?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        validation?: {
+          /**
+           * Espressione regolare per validazione personalizzata
+           */
+          pattern?: string | null;
+          /**
+           * Messaggio mostrato se la validazione fallisce
+           */
+          errorMessage?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  submitButton: {
+    text: string;
+    loadingText?: string | null;
+    style?: ('primary' | 'secondary' | 'outline') | null;
+  };
+  /**
+   * Messaggio mostrato dopo l'invio del form
+   */
+  successMessage?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Messaggio mostrato se l'invio fallisce
+   */
+  errorMessage?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  redirectOnSuccess?: {
+    enabled?: boolean | null;
+    url?: string | null;
+  };
+  emails?: {
+    sendToAdmin?: boolean | null;
+    /**
+     * Email separate da virgola
+     */
+    adminEmails?: string | null;
+    adminSubject?: string | null;
+    sendConfirmationToUser?: boolean | null;
+    /**
+     * Nome del campo email nel form
+     */
+    userEmailField?: string | null;
+    userSubject?: string | null;
+    userMessage?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  spam?: {
+    /**
+     * Campo nascosto per catturare bot
+     */
+    honeypot?: boolean | null;
+    recaptcha?: boolean | null;
+    recaptchaSiteKey?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions".
+ */
+export interface FormSubmission {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  form: string | Form;
+  /**
+   * Dati grezzi del form submission
+   */
+  submissionData:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Visualizzazione leggibile dei dati
+   */
+  formattedData?:
+    | {
+        field?: string | null;
+        label?: string | null;
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  submittedAt: string;
+  status?: ('new' | 'read' | 'processing' | 'completed' | 'spam' | 'archived') | null;
+  /**
+   * Note visibili solo agli admin
+   */
+  notes?: string | null;
+  metadata?: {
+    ip?: string | null;
+    userAgent?: string | null;
+    referrer?: string | null;
+    pageUrl?: string | null;
+    locale?: string | null;
+  };
+  files?:
+    | {
+        fieldName?: string | null;
+        file?: (string | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  emailsSent?:
+    | {
+        type?: ('admin' | 'user') | null;
+        to?: string | null;
+        sentAt?: string | null;
+        status?: ('sent' | 'failed') | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  /**
+   * Percorso da reindirizzare (es. /vecchia-pagina)
+   */
+  from: string;
+  toType?: ('internal' | 'custom') | null;
+  toPage?: (string | null) | Page;
+  /**
+   * URL completo o percorso relativo (es. /nuova-pagina o https://esempio.com)
+   */
+  to?: string | null;
+  /**
+   * Usa 301 per redirect permanenti (migliore per SEO)
+   */
+  type: '301' | '302' | '307' | '308';
+  active?: boolean | null;
+  /**
+   * Numeri più alti = priorità maggiore
+   */
+  priority?: number | null;
+  /**
+   * Come confrontare l'URL origine
+   */
+  matchType?: ('exact' | 'startsWith' | 'regex') | null;
+  /**
+   * Mantiene i parametri URL (es. ?ref=abc)
+   */
+  preserveQueryString?: boolean | null;
+  /**
+   * Note interne sul redirect
+   */
+  notes?: string | null;
+  stats?: {
+    hitCount?: number | null;
+    lastHit?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -373,6 +841,34 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: string | Post;
+      } | null)
+    | ({
+        relationTo: 'menus';
+        value: string | Menu;
+      } | null)
+    | ({
+        relationTo: 'forms';
+        value: string | Form;
+      } | null)
+    | ({
+        relationTo: 'form-submissions';
+        value: string | FormSubmission;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: string | Redirect;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -570,6 +1066,242 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  tenant?: T;
+  name?: T;
+  slug?: T;
+  description?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  tenant?: T;
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  featuredImage?: T;
+  category?: T;
+  tags?: T;
+  author?: T;
+  publishedAt?: T;
+  status?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKeywords?: T;
+        ogImage?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+        structuredData?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "menus_select".
+ */
+export interface MenusSelect<T extends boolean = true> {
+  tenant?: T;
+  name?: T;
+  location?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        internalLink?: T;
+        externalLink?: T;
+        openInNewTab?: T;
+        icon?: T;
+        submenu?:
+          | T
+          | {
+              label?: T;
+              linkType?: T;
+              internalLink?: T;
+              externalLink?: T;
+              openInNewTab?: T;
+              description?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms_select".
+ */
+export interface FormsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  slug?: T;
+  fields?:
+    | T
+    | {
+        fieldType?: T;
+        name?: T;
+        label?: T;
+        placeholder?: T;
+        required?: T;
+        width?: T;
+        defaultValue?: T;
+        options?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
+        rows?: T;
+        min?: T;
+        max?: T;
+        allowedFileTypes?: T;
+        maxFileSize?: T;
+        checkboxLabel?: T;
+        validation?:
+          | T
+          | {
+              pattern?: T;
+              errorMessage?: T;
+            };
+        id?: T;
+      };
+  submitButton?:
+    | T
+    | {
+        text?: T;
+        loadingText?: T;
+        style?: T;
+      };
+  successMessage?: T;
+  errorMessage?: T;
+  redirectOnSuccess?:
+    | T
+    | {
+        enabled?: T;
+        url?: T;
+      };
+  emails?:
+    | T
+    | {
+        sendToAdmin?: T;
+        adminEmails?: T;
+        adminSubject?: T;
+        sendConfirmationToUser?: T;
+        userEmailField?: T;
+        userSubject?: T;
+        userMessage?: T;
+      };
+  spam?:
+    | T
+    | {
+        honeypot?: T;
+        recaptcha?: T;
+        recaptchaSiteKey?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions_select".
+ */
+export interface FormSubmissionsSelect<T extends boolean = true> {
+  tenant?: T;
+  form?: T;
+  submissionData?: T;
+  formattedData?:
+    | T
+    | {
+        field?: T;
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  submittedAt?: T;
+  status?: T;
+  notes?: T;
+  metadata?:
+    | T
+    | {
+        ip?: T;
+        userAgent?: T;
+        referrer?: T;
+        pageUrl?: T;
+        locale?: T;
+      };
+  files?:
+    | T
+    | {
+        fieldName?: T;
+        file?: T;
+        id?: T;
+      };
+  emailsSent?:
+    | T
+    | {
+        type?: T;
+        to?: T;
+        sentAt?: T;
+        status?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  tenant?: T;
+  from?: T;
+  toType?: T;
+  toPage?: T;
+  to?: T;
+  type?: T;
+  active?: T;
+  priority?: T;
+  matchType?: T;
+  preserveQueryString?: T;
+  notes?: T;
+  stats?:
+    | T
+    | {
+        hitCount?: T;
+        lastHit?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -607,6 +1339,324 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: string;
+  logo?: {
+    image?: (string | null) | Media;
+    /**
+     * Logo alternativo per dark mode (opzionale)
+     */
+    darkImage?: (string | null) | Media;
+    /**
+     * Mostrato se non è presente un'immagine logo
+     */
+    text?: string | null;
+    link?: string | null;
+  };
+  /**
+   * Seleziona il menu da mostrare nell'header
+   */
+  navigation?: (string | null) | Menu;
+  cta?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    linkType?: ('internal' | 'external') | null;
+    internalLink?: (string | null) | Page;
+    externalLink?: string | null;
+    style?: ('primary' | 'secondary' | 'outline') | null;
+  };
+  contactInfo?: {
+    showPhone?: boolean | null;
+    phone?: string | null;
+    /**
+     * es. "Chiamaci"
+     */
+    phoneLabel?: string | null;
+    showEmail?: boolean | null;
+    email?: string | null;
+    /**
+     * es. "Scrivici"
+     */
+    emailLabel?: string | null;
+  };
+  socialLinks?: {
+    showSocial?: boolean | null;
+    links?:
+      | {
+          platform:
+            | 'facebook'
+            | 'instagram'
+            | 'twitter'
+            | 'linkedin'
+            | 'youtube'
+            | 'tiktok'
+            | 'pinterest'
+            | 'whatsapp'
+            | 'telegram';
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  settings?: {
+    /**
+     * L'header rimane fisso durante lo scroll
+     */
+    sticky?: boolean | null;
+    /**
+     * Header trasparente sulla hero (se supportato dal tema)
+     */
+    transparent?: boolean | null;
+    showLanguageSwitcher?: boolean | null;
+    showSearch?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: string;
+  logo?: {
+    image?: (string | null) | Media;
+    text?: string | null;
+    /**
+     * Breve descrizione sotto il logo
+     */
+    description?: string | null;
+  };
+  columns?:
+    | {
+        title: string;
+        /**
+         * Seleziona un menu esistente
+         */
+        menu?: (string | null) | Menu;
+        id?: string | null;
+      }[]
+    | null;
+  contactInfo?: {
+    showContactSection?: boolean | null;
+    title?: string | null;
+    address?: {
+      show?: boolean | null;
+      street?: string | null;
+      city?: string | null;
+      postalCode?: string | null;
+      country?: string | null;
+    };
+    phone?: string | null;
+    email?: string | null;
+    vatNumber?: string | null;
+  };
+  socialLinks?: {
+    showSocial?: boolean | null;
+    title?: string | null;
+    links?:
+      | {
+          platform:
+            | 'facebook'
+            | 'instagram'
+            | 'twitter'
+            | 'linkedin'
+            | 'youtube'
+            | 'tiktok'
+            | 'pinterest'
+            | 'whatsapp'
+            | 'telegram';
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  newsletter?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    description?: string | null;
+    buttonText?: string | null;
+    placeholderText?: string | null;
+  };
+  cta?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    linkType?: ('internal' | 'external') | null;
+    internalLink?: (string | null) | Page;
+    externalLink?: string | null;
+  };
+  bottomBar?: {
+    /**
+     * Usa {year} per inserire l'anno corrente automaticamente
+     */
+    copyright?: string | null;
+    legalLinks?:
+      | {
+          label: string;
+          linkType?: ('internal' | 'external') | null;
+          internalLink?: (string | null) | Page;
+          externalLink?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    showPaymentIcons?: boolean | null;
+    paymentMethods?:
+      | ('visa' | 'mastercard' | 'amex' | 'paypal' | 'applepay' | 'googlepay' | 'stripe' | 'banktransfer')[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  logo?:
+    | T
+    | {
+        image?: T;
+        darkImage?: T;
+        text?: T;
+        link?: T;
+      };
+  navigation?: T;
+  cta?:
+    | T
+    | {
+        enabled?: T;
+        text?: T;
+        linkType?: T;
+        internalLink?: T;
+        externalLink?: T;
+        style?: T;
+      };
+  contactInfo?:
+    | T
+    | {
+        showPhone?: T;
+        phone?: T;
+        phoneLabel?: T;
+        showEmail?: T;
+        email?: T;
+        emailLabel?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        showSocial?: T;
+        links?:
+          | T
+          | {
+              platform?: T;
+              url?: T;
+              id?: T;
+            };
+      };
+  settings?:
+    | T
+    | {
+        sticky?: T;
+        transparent?: T;
+        showLanguageSwitcher?: T;
+        showSearch?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  logo?:
+    | T
+    | {
+        image?: T;
+        text?: T;
+        description?: T;
+      };
+  columns?:
+    | T
+    | {
+        title?: T;
+        menu?: T;
+        id?: T;
+      };
+  contactInfo?:
+    | T
+    | {
+        showContactSection?: T;
+        title?: T;
+        address?:
+          | T
+          | {
+              show?: T;
+              street?: T;
+              city?: T;
+              postalCode?: T;
+              country?: T;
+            };
+        phone?: T;
+        email?: T;
+        vatNumber?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        showSocial?: T;
+        title?: T;
+        links?:
+          | T
+          | {
+              platform?: T;
+              url?: T;
+              id?: T;
+            };
+      };
+  newsletter?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        description?: T;
+        buttonText?: T;
+        placeholderText?: T;
+      };
+  cta?:
+    | T
+    | {
+        enabled?: T;
+        text?: T;
+        linkType?: T;
+        internalLink?: T;
+        externalLink?: T;
+      };
+  bottomBar?:
+    | T
+    | {
+        copyright?: T;
+        legalLinks?:
+          | T
+          | {
+              label?: T;
+              linkType?: T;
+              internalLink?: T;
+              externalLink?: T;
+              id?: T;
+            };
+        showPaymentIcons?: T;
+        paymentMethods?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

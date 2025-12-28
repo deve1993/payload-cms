@@ -180,10 +180,4 @@ export const Redirects: CollectionConfig = {
       ],
     },
   ],
-  indexes: [
-    {
-      fields: { from: 1, tenant: 1 },
-      unique: true,
-    },
-  ],
 }
