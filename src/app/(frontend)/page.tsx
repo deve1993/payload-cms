@@ -24,8 +24,8 @@ export default async function HomePage() {
             marginBottom: '20px',
           }}
         />
-        {!user && <h1>Benvenuto in Pixarts CMS</h1>}
-        {user && <h1>Bentornato, {user.email}</h1>}
+        {!user && <h1 className="welcome">Benvenuto in Pixarts CMS</h1>}
+        {user && <h1 className="welcome">Bentornato, {user.email}</h1>}
         <p className="subtitle">Sistema di gestione contenuti multi-tenant</p>
         <div className="links">
           <a
@@ -34,14 +34,6 @@ export default async function HomePage() {
             rel="noopener noreferrer"
           >
             Pannello Admin
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentazione
           </a>
         </div>
       </div>
