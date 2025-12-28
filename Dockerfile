@@ -11,8 +11,9 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-# Install deps and fix sharp for Alpine musl
+# Install deps and fix sharp + SWC for Alpine musl
 RUN npm install --legacy-peer-deps && \
+    npm install --os=linux --libc=musl --cpu=x64 @next/swc-linux-x64-musl && \
     rm -rf /app/node_modules/sharp /app/node_modules/next/node_modules/sharp && \
     npm install --os=linux --libc=musl --cpu=x64 sharp@0.33.5 && \
     mkdir -p /app/node_modules/next/node_modules && \
