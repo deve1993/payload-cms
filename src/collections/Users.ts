@@ -7,9 +7,11 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   access: {
+    // Permetti la creazione del primo utente (setup iniziale)
     read: ({ req: { user } }) => {
-      if (user?.role === 'super-admin') return true
-      if (user?.tenant) {
+      if (!user) return false
+      if (user.role === 'super-admin') return true
+      if (user.tenant) {
         return {
           tenant: {
             equals: typeof user.tenant === 'string' ? user.tenant : user.tenant.id,
@@ -18,16 +20,32 @@ export const Users: CollectionConfig = {
       }
       return false
     },
-    create: ({ req: { user } }) => user?.role === 'super-admin' || user?.role === 'admin',
-    update: ({ req: { user } }) => user?.role === 'super-admin' || user?.role === 'admin',
-    delete: ({ req: { user } }) => user?.role === 'super-admin',
+    create: async ({ req }) => {
+      // Permetti creazione se non ci sono utenti (setup iniziale)
+      if (!req.user) {
+        const existingUsers = await req.payload.find({
+          collection: 'users',
+          limit: 1,
+        })
+        return existingUsers.totalDocs === 0
+      }
+      return req.user.role === 'super-admin' || req.user.role === 'admin'
+    },
+    update: ({ req: { user } }) => {
+      if (!user) return false
+      return user.role === 'super-admin' || user.role === 'admin'
+    },
+    delete: ({ req: { user } }) => {
+      if (!user) return false
+      return user.role === 'super-admin'
+    },
   },
   fields: [
     {
       name: 'role',
       type: 'select',
       required: true,
-      defaultValue: 'editor',
+      defaultValue: 'super-admin',
       options: [
         { label: 'Super Admin', value: 'super-admin' },
         { label: 'Admin Tenant', value: 'admin' },
@@ -41,11 +59,22 @@ export const Users: CollectionConfig = {
       name: 'tenant',
       type: 'relationship',
       relationTo: 'tenants',
-      required: true,
+      required: false,
       hasMany: false,
       admin: {
-        description: 'Il cliente/sito a cui appartiene questo utente',
+        description: 'Il cliente/sito a cui appartiene questo utente (non richiesto per Super Admin)',
         condition: (data) => data?.role !== 'super-admin',
+      },
+      hooks: {
+        beforeValidate: [
+          ({ data, value }) => {
+            // Tenant è obbligatorio solo per non-super-admin
+            if (data?.role !== 'super-admin' && !value) {
+              throw new Error('Il tenant è obbligatorio per utenti non Super Admin')
+            }
+            return value
+          },
+        ],
       },
     },
   ],
