@@ -90,7 +90,7 @@ export const Posts: CollectionConfig = {
         position: 'sidebar',
       },
       filterOptions: ({ user }) => {
-        if (user?.role === 'super-admin') return {}
+        if (user?.role === 'super-admin') return true
         return {
           tenant: {
             equals: typeof user?.tenant === 'string' ? user?.tenant : user?.tenant?.id,
@@ -108,7 +108,7 @@ export const Posts: CollectionConfig = {
         position: 'sidebar',
       },
       filterOptions: ({ user }) => {
-        if (user?.role === 'super-admin') return {}
+        if (user?.role === 'super-admin') return true
         return {
           tenant: {
             equals: typeof user?.tenant === 'string' ? user?.tenant : user?.tenant?.id,

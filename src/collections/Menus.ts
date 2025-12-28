@@ -76,7 +76,7 @@ export const Menus: CollectionConfig = {
             condition: (_, siblingData) => siblingData?.linkType === 'internal',
           },
           filterOptions: ({ user }) => {
-            if (user?.role === 'super-admin') return {}
+            if (user?.role === 'super-admin') return true
             return {
               tenant: {
                 equals: typeof user?.tenant === 'string' ? user?.tenant : user?.tenant?.id,
@@ -141,7 +141,7 @@ export const Menus: CollectionConfig = {
                 condition: (_, siblingData) => siblingData?.linkType === 'internal',
               },
               filterOptions: ({ user }) => {
-                if (user?.role === 'super-admin') return {}
+                if (user?.role === 'super-admin') return true
                 return {
                   tenant: {
                     equals: typeof user?.tenant === 'string' ? user?.tenant : user?.tenant?.id,
