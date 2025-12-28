@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { tenantField } from '../fields/tenantField'
+import { filterByTenant } from '../access/filterByTenant'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -11,7 +13,14 @@ export const Pages: CollectionConfig = {
       },
     },
   },
+  access: {
+    read: filterByTenant,
+    create: filterByTenant,
+    update: filterByTenant,
+    delete: filterByTenant,
+  },
   fields: [
+    tenantField,
     {
       name: 'title',
       type: 'text',
@@ -21,7 +30,6 @@ export const Pages: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
-      unique: true,
       admin: {
         position: 'sidebar',
       },
