@@ -47,4 +47,23 @@ export default buildConfig({
   }),
   sharp,
   plugins: [],
+  // Configurazione localizzazione
+  localization: {
+    locales: [
+      {
+        label: 'English',
+        code: 'en',
+      },
+      {
+        label: 'Italiano',
+        code: 'it',
+      },
+      {
+        label: 'Čeština',
+        code: 'cs',
+      },
+    ],
+    defaultLocale: 'en',
+    fallback: true,
+  },
 })

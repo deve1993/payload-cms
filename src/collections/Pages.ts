@@ -26,6 +26,8 @@ export const Pages: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
+      label: 'Titolo',
     },
     {
       name: 'slug',
@@ -38,11 +40,14 @@ export const Pages: CollectionConfig = {
     {
       name: 'content',
       type: 'richText',
+      localized: true,
+      label: 'Contenuto',
     },
     {
       name: 'heroImage',
       type: 'upload',
       relationTo: 'media',
+      label: 'Immagine Hero',
     },
     seoFields,
   ],

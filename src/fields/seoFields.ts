@@ -4,6 +4,7 @@ export const seoFields: Field = {
   name: 'seo',
   type: 'group',
   label: 'SEO',
+  localized: true,
   admin: {
     description: 'Ottimizzazione per i motori di ricerca',
   },
