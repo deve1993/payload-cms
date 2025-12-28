@@ -53,8 +53,8 @@ export default buildConfig({
   plugins: [],
   // Configurazione email con Resend
   email: resendAdapter({
-    defaultFromAddress: 'onboarding@resend.dev',
-    defaultFromName: 'Payload CMS',
+    defaultFromAddress: 'noreply@pixarts.eu',
+    defaultFromName: 'Pixarts CMS',
     apiKey: process.env.RESEND_API_KEY || '',
   }),
   // Traduzioni interfaccia admin
