@@ -11,10 +11,12 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-# Install deps and rebuild ALL sharp instances for Alpine musl
+# Install deps and fix sharp for Alpine musl
 RUN npm install --legacy-peer-deps && \
-    npm install --os=linux --libc=musl --cpu=x64 sharp@0.34.2 && \
-    cp -r /app/node_modules/sharp/* /app/node_modules/next/node_modules/sharp/ 2>/dev/null || true
+    rm -rf /app/node_modules/sharp /app/node_modules/next/node_modules/sharp && \
+    npm install --os=linux --libc=musl --cpu=x64 sharp@0.33.5 && \
+    mkdir -p /app/node_modules/next/node_modules && \
+    ln -s /app/node_modules/sharp /app/node_modules/next/node_modules/sharp
 
 
 # Rebuild the source code only when needed
