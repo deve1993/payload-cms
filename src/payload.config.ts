@@ -1,4 +1,5 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -50,6 +51,12 @@ export default buildConfig({
   }),
   sharp,
   plugins: [],
+  // Configurazione email con Resend
+  email: resendAdapter({
+    defaultFromAddress: 'onboarding@resend.dev',
+    defaultFromName: 'Payload CMS',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
   // Traduzioni interfaccia admin
   i18n: {
     supportedLanguages: { en, it, cs },
