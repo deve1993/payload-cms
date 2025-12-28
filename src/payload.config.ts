@@ -4,6 +4,9 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { it } from '@payloadcms/translations/languages/it'
+import { en } from '@payloadcms/translations/languages/en'
+import { cs } from '@payloadcms/translations/languages/cs'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -47,7 +50,12 @@ export default buildConfig({
   }),
   sharp,
   plugins: [],
-  // Configurazione localizzazione
+  // Traduzioni interfaccia admin
+  i18n: {
+    supportedLanguages: { en, it, cs },
+    fallbackLanguage: 'en',
+  },
+  // Configurazione localizzazione contenuti
   localization: {
     locales: [
       {
