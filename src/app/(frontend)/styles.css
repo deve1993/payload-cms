@@ -113,6 +113,17 @@ svg {
 
     h1 {
       text-align: center;
+      background: linear-gradient(90deg, #FF6B2C, #FFB347);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      margin-top: -20px;
+      opacity: 0.7;
+      font-size: 1.1rem;
+      text-align: center;
     }
   }
 
@@ -129,14 +140,27 @@ svg {
 
     .admin {
       color: rgb(0, 0, 0);
-      background: rgb(1000, 1000, 1000);
-      border: 1px solid rgb(0, 0, 0);
+      background: linear-gradient(90deg, #FF6B2C, #FFB347);
+      border: none;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 44, 0.4);
+      }
     }
 
     .docs {
-      color: rgb(1000, 1000, 1000);
-      background: rgb(0, 0, 0);
-      border: 1px solid rgb(1000, 1000, 1000);
+      color: #FFB347;
+      background: transparent;
+      border: 1px solid #FF6B2C;
+      transition: background 0.2s, color 0.2s;
+
+      &:hover {
+        background: rgba(255, 107, 44, 0.1);
+        color: #FF6B2C;
+      }
     }
   }
 
