@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
-  label: 'Footer',
+  label: 'Piè di Pagina',
   admin: {
     group: 'Configurazione Sito',
   },

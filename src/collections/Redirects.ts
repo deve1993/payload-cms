@@ -4,6 +4,10 @@ import { filterByTenant } from '../access/filterByTenant'
 
 export const Redirects: CollectionConfig = {
   slug: 'redirects',
+  labels: {
+    singular: 'Redirect',
+    plural: 'Redirect',
+  },
   admin: {
     useAsTitle: 'from',
     defaultColumns: ['from', 'to', 'type', 'active', 'tenant'],

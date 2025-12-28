@@ -4,10 +4,14 @@ import { filterByTenant } from '../access/filterByTenant'
 
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
+  labels: {
+    singular: 'Invio Form',
+    plural: 'Invii Form',
+  },
   admin: {
     useAsTitle: 'submittedAt',
     defaultColumns: ['form', 'submittedAt', 'status', 'tenant'],
-    group: 'Forms',
+    group: 'Moduli',
   },
   access: {
     read: filterByTenant,

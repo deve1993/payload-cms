@@ -4,10 +4,14 @@ import { filterByTenant } from '../access/filterByTenant'
 
 export const Forms: CollectionConfig = {
   slug: 'forms',
+  labels: {
+    singular: 'Modulo',
+    plural: 'Moduli',
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'tenant'],
-    group: 'Forms',
+    group: 'Moduli',
   },
   access: {
     read: filterByTenant,
