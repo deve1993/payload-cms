@@ -6,7 +6,7 @@ export const Logo: React.FC = () => {
   return (
     <div className="pixarts-logo">
       <img
-        src="/logo-white.png"
+        src="/1.png"
         alt="Pixarts"
         style={{
           display: 'block',
