@@ -25,7 +25,7 @@ export default async function HomePage() {
           }}
         />
         {!user && <h1 className="welcome">Benvenuto in Pixarts CMS</h1>}
-        {user && <h1 className="welcome">Bentornato, {user.email}</h1>}
+        {user && <h1 className="welcome">Bentornato</h1>}
         <p className="subtitle">Sistema di gestione contenuti multi-tenant</p>
         <div className="links">
           <a
