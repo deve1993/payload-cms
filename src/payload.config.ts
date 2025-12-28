@@ -28,6 +28,15 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  // CORS: permette ai siti clienti di chiamare le API
+  // Aggiungi qui i domini dei siti clienti
+  cors: [
+    'http://localhost:3001', // Sviluppo locale siti clienti
+    'http://localhost:3002',
+    // Aggiungi i domini dei clienti in produzione:
+    // 'https://www.sitocliente1.it',
+    // 'https://www.sitocliente2.com',
+  ],
   admin: {
     user: Users.slug,
     importMap: {
