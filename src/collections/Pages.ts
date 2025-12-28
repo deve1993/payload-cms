@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { tenantField } from '../fields/tenantField'
 import { filterByTenant } from '../access/filterByTenant'
+import { seoFields } from '../fields/seoFields'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -43,5 +44,6 @@ export const Pages: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
     },
+    seoFields,
   ],
 }
