@@ -20,6 +20,12 @@ import { Menus } from './collections/Menus'
 import { Forms } from './collections/Forms'
 import { FormSubmissions } from './collections/FormSubmissions'
 import { Redirects } from './collections/Redirects'
+import { Features } from './collections/Features'
+import { Team } from './collections/Team'
+import { Stats } from './collections/Stats'
+import { Testimonials } from './collections/Testimonials'
+import { Services } from './collections/Services'
+import { FAQ } from './collections/FAQ'
 
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
@@ -80,6 +86,12 @@ export default buildConfig({
     Forms,
     FormSubmissions,
     Redirects,
+    Features,
+    Team,
+    Stats,
+    Testimonials,
+    Services,
+    FAQ,
   ],
   globals: [Header, Footer],
   editor: lexicalEditor(),
