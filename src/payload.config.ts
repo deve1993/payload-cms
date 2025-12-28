@@ -26,6 +26,14 @@ import { Stats } from './collections/Stats'
 import { Testimonials } from './collections/Testimonials'
 import { Services } from './collections/Services'
 import { FAQ } from './collections/FAQ'
+import { Timeline } from './collections/Timeline'
+import { Values } from './collections/Values'
+import { Certifications } from './collections/Certifications'
+import { Pillars } from './collections/Pillars'
+import { Benefits } from './collections/Benefits'
+import { Machinery } from './collections/Machinery'
+import { Highlights } from './collections/Highlights'
+import { Projects } from './collections/Projects'
 
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
@@ -92,6 +100,14 @@ export default buildConfig({
     Testimonials,
     Services,
     FAQ,
+    Timeline,
+    Values,
+    Certifications,
+    Pillars,
+    Benefits,
+    Machinery,
+    Highlights,
+    Projects,
   ],
   globals: [Header, Footer],
   editor: lexicalEditor(),
