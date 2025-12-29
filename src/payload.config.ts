@@ -47,9 +47,7 @@ export default buildConfig({
   cors: [
     'http://localhost:3001', // Sviluppo locale siti clienti
     'http://localhost:3002',
-    // Aggiungi i domini dei clienti in produzione:
-    // 'https://www.sitocliente1.it',
-    // 'https://www.sitocliente2.com',
+    'https://dco040sw8440s80ks8w080ww.fl1.it', // Sito client produzione
   ],
   admin: {
     user: Users.slug,
