@@ -1,18 +1,29 @@
 import React from 'react'
+import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
 import './styles.css'
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  title: {
+    default: 'Pixarts - Soluzioni Digitali Innovative',
+    template: '%s | Pixarts',
+  },
+  description:
+    'Pixarts crea soluzioni digitali innovative: siti web, e-commerce, app e strategie di marketing per far crescere il tuo business.',
+  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
+  themeColor: '#000000',
+  icons: {
+    icon: '/pixarts-logo-simple.svg',
+  },
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="it">
       <body>
+        <Header />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   )
