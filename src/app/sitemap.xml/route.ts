@@ -1,6 +1,8 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
@@ -28,13 +30,13 @@ export async function GET(request: Request) {
     }
   }
 
-  // Ottieni tutte le pagine (filtrate per tenant se specificato)
   const pages = await payload.find({
     collection: 'pages',
     where: {
       ...tenantFilter,
       'seo.noIndex': { not_equals: true },
     },
+    overrideAccess: false,
     limit: 1000,
   })
 

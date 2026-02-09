@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { tenantField } from '../fields/tenantField'
-import { filterByTenant } from '../access/filterByTenant'
+import { filterByTenant, isAuthenticated } from '../access/filterByTenant'
+import { createEnsureUniqueTenantSlug } from '../hooks/ensureUniqueTenantSlug'
 
 export const Forms: CollectionConfig = {
   slug: 'forms',
@@ -15,9 +16,12 @@ export const Forms: CollectionConfig = {
   },
   access: {
     read: filterByTenant,
-    create: filterByTenant,
+    create: isAuthenticated,
     update: filterByTenant,
     delete: filterByTenant,
+  },
+  hooks: {
+    beforeValidate: [createEnsureUniqueTenantSlug('forms')],
   },
   fields: [
     tenantField,

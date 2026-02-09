@@ -1,7 +1,8 @@
 import type { CollectionConfig } from 'payload'
 import { tenantField } from '../fields/tenantField'
-import { filterByTenant } from '../access/filterByTenant'
+import { filterByTenant, isAuthenticated } from '../access/filterByTenant'
 import { seoFields } from '../fields/seoFields'
+import { createEnsureUniqueTenantSlug } from '../hooks/ensureUniqueTenantSlug'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -16,9 +17,12 @@ export const Services: CollectionConfig = {
   },
   access: {
     read: filterByTenant,
-    create: filterByTenant,
+    create: isAuthenticated,
     update: filterByTenant,
     delete: filterByTenant,
+  },
+  hooks: {
+    beforeValidate: [createEnsureUniqueTenantSlug('services')],
   },
   fields: [
     tenantField,

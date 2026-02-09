@@ -78,6 +78,22 @@ export interface Config {
     forms: Form;
     'form-submissions': FormSubmission;
     redirects: Redirect;
+    features: Feature;
+    team: Team;
+    stats: Stat;
+    testimonials: Testimonial;
+    services: Service;
+    faq: Faq;
+    timeline: Timeline;
+    values: Value;
+    certifications: Certification;
+    pillars: Pillar;
+    benefits: Benefit;
+    machinery: Machinery;
+    highlights: Highlight;
+    projects: Project;
+    headers: Header;
+    footers: Footer;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -96,6 +112,22 @@ export interface Config {
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
+    features: FeaturesSelect<false> | FeaturesSelect<true>;
+    team: TeamSelect<false> | TeamSelect<true>;
+    stats: StatsSelect<false> | StatsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    faq: FaqSelect<false> | FaqSelect<true>;
+    timeline: TimelineSelect<false> | TimelineSelect<true>;
+    values: ValuesSelect<false> | ValuesSelect<true>;
+    certifications: CertificationsSelect<false> | CertificationsSelect<true>;
+    pillars: PillarsSelect<false> | PillarsSelect<true>;
+    benefits: BenefitsSelect<false> | BenefitsSelect<true>;
+    machinery: MachinerySelect<false> | MachinerySelect<true>;
+    highlights: HighlightsSelect<false> | HighlightsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    headers: HeadersSelect<false> | HeadersSelect<true>;
+    footers: FootersSelect<false> | FootersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -105,14 +137,8 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'it' | 'cs') | ('en' | 'it' | 'cs')[];
-  globals: {
-    header: Header;
-    footer: Footer;
-  };
-  globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>;
-    footer: FooterSelect<false> | FooterSelect<true>;
-  };
+  globals: {};
+  globalsSelect: {};
   locale: 'en' | 'it' | 'cs';
   user: User & {
     collection: 'users';
@@ -160,11 +186,89 @@ export interface Tenant {
   active?: boolean | null;
   settings?: {
     logo?: (string | null) | Media;
+    favicon?: (string | null) | Media;
     /**
      * Es: #3498db
      */
     primaryColor?: string | null;
+    /**
+     * Es: #2ecc71
+     */
+    secondaryColor?: string | null;
     siteName?: string | null;
+    /**
+     * Meta description per SEO
+     */
+    siteDescription?: string | null;
+  };
+  /**
+   * Lingue supportate dal sito
+   */
+  locales?: ('it' | 'en' | 'cs')[] | null;
+  defaultLocale?: ('it' | 'en' | 'cs') | null;
+  /**
+   * Funzionalità aggiuntive attive per questo tenant
+   */
+  modules?:
+    | (
+        | 'blog'
+        | 'reservations'
+        | 'newsletter'
+        | 'reviews'
+        | 'faq'
+        | 'gallery'
+        | 'multi-location'
+        | 'events'
+        | 'ecommerce'
+        | 'affiliates'
+      )[]
+    | null;
+  /**
+   * Configurazione JSON per moduli specifici (es: orari prenotazioni, provider pagamenti)
+   */
+  modulesConfig?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Tokens di design per il sito
+   */
+  design?: {
+    style?: ('modern' | 'classic' | 'minimal' | 'bold' | 'elegant') | null;
+    borderRadius?: ('0' | '4' | '8' | '12' | '9999') | null;
+    /**
+     * Es: Inter, Playfair Display
+     */
+    fontHeading?: string | null;
+    /**
+     * Es: Inter, Open Sans
+     */
+    fontBody?: string | null;
+  };
+  social?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    twitter?: string | null;
+    youtube?: string | null;
+  };
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+    vatNumber?: string | null;
+  };
+  analytics?: {
+    /**
+     * Es: G-XXXXXXXXXX
+     */
+    googleAnalyticsId?: string | null;
+    plausibleDomain?: string | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -804,6 +908,798 @@ export interface Redirect {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "features".
+ */
+export interface Feature {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  description?: string | null;
+  /**
+   * Nome icona (es: "star", "check", "rocket") o classe CSS
+   */
+  icon?: string | null;
+  image?: (string | null) | Media;
+  link?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    url?: string | null;
+  };
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team".
+ */
+export interface Team {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  name: string;
+  role?: string | null;
+  bio?: string | null;
+  photo?: (string | null) | Media;
+  email?: string | null;
+  phone?: string | null;
+  social?: {
+    linkedin?: string | null;
+    twitter?: string | null;
+    facebook?: string | null;
+    instagram?: string | null;
+  };
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stats".
+ */
+export interface Stat {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  /**
+   * Es: "150+", "99%", "24/7"
+   */
+  value: string;
+  /**
+   * Es: "Clienti Soddisfatti", "Progetti Completati"
+   */
+  label: string;
+  description?: string | null;
+  /**
+   * Nome icona (es: "users", "chart", "trophy")
+   */
+  icon?: string | null;
+  /**
+   * Es: "$", "€"
+   */
+  prefix?: string | null;
+  /**
+   * Es: "+", "%", "K"
+   */
+  suffix?: string | null;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  content: string;
+  author: string;
+  /**
+   * Es: "CEO", "Marketing Manager"
+   */
+  role?: string | null;
+  company?: string | null;
+  avatar?: (string | null) | Media;
+  companyLogo?: (string | null) | Media;
+  /**
+   * Da 1 a 5 stelle
+   */
+  rating?: number | null;
+  /**
+   * Mostra in home page
+   */
+  featured?: boolean | null;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  slug: string;
+  /**
+   * Breve descrizione per anteprime
+   */
+  excerpt?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Nome icona (es: "cog", "wrench", "lightbulb")
+   */
+  icon?: string | null;
+  image?: (string | null) | Media;
+  gallery?:
+    | {
+        image: string | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  features?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  pricing?: {
+    showPrice?: boolean | null;
+    /**
+     * Es: "€99", "Da €50/mese"
+     */
+    price?: string | null;
+    /**
+     * Es: "al mese", "una tantum"
+     */
+    priceDescription?: string | null;
+  };
+  cta?: {
+    text?: string | null;
+    link?: string | null;
+  };
+  /**
+   * Ottimizzazione per i motori di ricerca
+   */
+  seo?: {
+    /**
+     * Titolo che appare nei risultati di ricerca (50-60 caratteri)
+     */
+    metaTitle?: string | null;
+    /**
+     * Descrizione che appare nei risultati di ricerca (150-160 caratteri)
+     */
+    metaDescription?: string | null;
+    /**
+     * Parole chiave separate da virgola (opzionale)
+     */
+    metaKeywords?: string | null;
+    /**
+     * Immagine per la condivisione sui social (1200x630px consigliato)
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * URL canonico se diverso da quello predefinito
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Impedisce ai motori di ricerca di indicizzare questa pagina
+     */
+    noIndex?: boolean | null;
+    /**
+     * Impedisce ai motori di ricerca di seguire i link in questa pagina
+     */
+    noFollow?: boolean | null;
+    /**
+     * Dati strutturati per rich snippets (opzionale)
+     */
+    structuredData?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  order?: number | null;
+  featured?: boolean | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq".
+ */
+export interface Faq {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  question: string;
+  answer: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Es: "Generale", "Pagamenti", "Spedizioni"
+   */
+  category?: string | null;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "timeline".
+ */
+export interface Timeline {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  /**
+   * Es: "2020", "1995-2000"
+   */
+  year: string;
+  title: string;
+  description?: string | null;
+  image?: (string | null) | Media;
+  icon?: string | null;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "values".
+ */
+export interface Value {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  description?: string | null;
+  /**
+   * Nome icona (es: "heart", "shield", "star")
+   */
+  icon?: string | null;
+  image?: (string | null) | Media;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "certifications".
+ */
+export interface Certification {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  /**
+   * Es: "ISO 9001:2015", "CE Mark"
+   */
+  name: string;
+  description?: string | null;
+  issuer?: string | null;
+  year?: string | null;
+  expirationDate?: string | null;
+  logo?: (string | null) | Media;
+  document?: (string | null) | Media;
+  link?: string | null;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pillars".
+ */
+export interface Pillar {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  subtitle?: string | null;
+  description?: string | null;
+  icon?: string | null;
+  image?: (string | null) | Media;
+  /**
+   * Es: "#FF5733", "blue"
+   */
+  color?: string | null;
+  link?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    url?: string | null;
+  };
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "benefits".
+ */
+export interface Benefit {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  description?: string | null;
+  /**
+   * Nome icona (es: "check", "thumbs-up", "award")
+   */
+  icon?: string | null;
+  image?: (string | null) | Media;
+  /**
+   * Es: "100% Garantito", "Risparmio 30%"
+   */
+  highlight?: string | null;
+  order?: number | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "machinery".
+ */
+export interface Machinery {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  name: string;
+  description?: string | null;
+  /**
+   * Es: "CNC", "Stampaggio", "Assemblaggio"
+   */
+  category?: string | null;
+  manufacturer?: string | null;
+  model?: string | null;
+  year?: string | null;
+  image?: (string | null) | Media;
+  gallery?:
+    | {
+        image: string | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  specifications?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  capabilities?:
+    | {
+        capability: string;
+        id?: string | null;
+      }[]
+    | null;
+  order?: number | null;
+  featured?: boolean | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "highlights".
+ */
+export interface Highlight {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  subtitle?: string | null;
+  description?: string | null;
+  type?: ('generic' | 'product' | 'service' | 'event' | 'news' | 'promo') | null;
+  icon?: string | null;
+  image?: (string | null) | Media;
+  /**
+   * Es: "50%", "€999", "TOP"
+   */
+  value?: string | null;
+  /**
+   * Es: "Nuovo", "Bestseller", "Offerta"
+   */
+  badge?: string | null;
+  link?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    url?: string | null;
+  };
+  order?: number | null;
+  featured?: boolean | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  title: string;
+  slug: string;
+  /**
+   * Breve descrizione per anteprime
+   */
+  excerpt?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  client?: string | null;
+  /**
+   * Es: "Web Design", "Industriale", "Consulenza"
+   */
+  category?: string | null;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  year?: string | null;
+  /**
+   * Es: "3 mesi", "1 anno"
+   */
+  duration?: string | null;
+  featuredImage?: (string | null) | Media;
+  gallery?:
+    | {
+        image: string | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  testimonial?: {
+    enabled?: boolean | null;
+    quote?: string | null;
+    author?: string | null;
+    role?: string | null;
+  };
+  results?:
+    | {
+        /**
+         * Es: "+50%", "€100K"
+         */
+        metric: string;
+        /**
+         * Es: "Aumento vendite", "Risparmio"
+         */
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  link?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    url?: string | null;
+  };
+  /**
+   * Ottimizzazione per i motori di ricerca
+   */
+  seo?: {
+    /**
+     * Titolo che appare nei risultati di ricerca (50-60 caratteri)
+     */
+    metaTitle?: string | null;
+    /**
+     * Descrizione che appare nei risultati di ricerca (150-160 caratteri)
+     */
+    metaDescription?: string | null;
+    /**
+     * Parole chiave separate da virgola (opzionale)
+     */
+    metaKeywords?: string | null;
+    /**
+     * Immagine per la condivisione sui social (1200x630px consigliato)
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * URL canonico se diverso da quello predefinito
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Impedisce ai motori di ricerca di indicizzare questa pagina
+     */
+    noIndex?: boolean | null;
+    /**
+     * Impedisce ai motori di ricerca di seguire i link in questa pagina
+     */
+    noFollow?: boolean | null;
+    /**
+     * Dati strutturati per rich snippets (opzionale)
+     */
+    structuredData?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  order?: number | null;
+  featured?: boolean | null;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "headers".
+ */
+export interface Header {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  internalName: string;
+  logo?: {
+    image?: (string | null) | Media;
+    /**
+     * Logo alternativo per dark mode (opzionale)
+     */
+    darkImage?: (string | null) | Media;
+    /**
+     * Mostrato se non è presente un'immagine logo
+     */
+    text?: string | null;
+    link?: string | null;
+  };
+  /**
+   * Seleziona il menu da mostrare nell'header
+   */
+  navigation?: (string | null) | Menu;
+  cta?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    linkType?: ('internal' | 'external') | null;
+    internalLink?: (string | null) | Page;
+    externalLink?: string | null;
+    style?: ('primary' | 'secondary' | 'outline') | null;
+  };
+  contactInfo?: {
+    showPhone?: boolean | null;
+    phone?: string | null;
+    /**
+     * es. "Chiamaci"
+     */
+    phoneLabel?: string | null;
+    showEmail?: boolean | null;
+    email?: string | null;
+    /**
+     * es. "Scrivici"
+     */
+    emailLabel?: string | null;
+  };
+  socialLinks?: {
+    showSocial?: boolean | null;
+    links?:
+      | {
+          platform:
+            | 'facebook'
+            | 'instagram'
+            | 'twitter'
+            | 'linkedin'
+            | 'youtube'
+            | 'tiktok'
+            | 'pinterest'
+            | 'whatsapp'
+            | 'telegram';
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  settings?: {
+    /**
+     * L'header rimane fisso durante lo scroll
+     */
+    sticky?: boolean | null;
+    /**
+     * Header trasparente sulla hero (se supportato dal tema)
+     */
+    transparent?: boolean | null;
+    showLanguageSwitcher?: boolean | null;
+    showSearch?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footers".
+ */
+export interface Footer {
+  id: string;
+  /**
+   * Il cliente proprietario di questo contenuto
+   */
+  tenant: string | Tenant;
+  internalName: string;
+  logo?: {
+    image?: (string | null) | Media;
+    text?: string | null;
+    /**
+     * Breve descrizione sotto il logo
+     */
+    description?: string | null;
+  };
+  columns?:
+    | {
+        title: string;
+        /**
+         * Seleziona un menu esistente
+         */
+        menu?: (string | null) | Menu;
+        id?: string | null;
+      }[]
+    | null;
+  contactInfo?: {
+    showContactSection?: boolean | null;
+    title?: string | null;
+    address?: {
+      show?: boolean | null;
+      street?: string | null;
+      city?: string | null;
+      postalCode?: string | null;
+      country?: string | null;
+    };
+    phone?: string | null;
+    email?: string | null;
+    vatNumber?: string | null;
+  };
+  socialLinks?: {
+    showSocial?: boolean | null;
+    title?: string | null;
+    links?:
+      | {
+          platform:
+            | 'facebook'
+            | 'instagram'
+            | 'twitter'
+            | 'linkedin'
+            | 'youtube'
+            | 'tiktok'
+            | 'pinterest'
+            | 'whatsapp'
+            | 'telegram';
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  newsletter?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    description?: string | null;
+    buttonText?: string | null;
+    placeholderText?: string | null;
+  };
+  cta?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    linkType?: ('internal' | 'external') | null;
+    internalLink?: (string | null) | Page;
+    externalLink?: string | null;
+  };
+  bottomBar?: {
+    /**
+     * Usa {year} per inserire l'anno corrente automaticamente
+     */
+    copyright?: string | null;
+    legalLinks?:
+      | {
+          label: string;
+          linkType?: ('internal' | 'external') | null;
+          internalLink?: (string | null) | Page;
+          externalLink?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    showPaymentIcons?: boolean | null;
+    paymentMethods?:
+      | ('visa' | 'mastercard' | 'amex' | 'paypal' | 'applepay' | 'googlepay' | 'stripe' | 'banktransfer')[]
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -869,6 +1765,70 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'redirects';
         value: string | Redirect;
+      } | null)
+    | ({
+        relationTo: 'features';
+        value: string | Feature;
+      } | null)
+    | ({
+        relationTo: 'team';
+        value: string | Team;
+      } | null)
+    | ({
+        relationTo: 'stats';
+        value: string | Stat;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: string | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: string | Service;
+      } | null)
+    | ({
+        relationTo: 'faq';
+        value: string | Faq;
+      } | null)
+    | ({
+        relationTo: 'timeline';
+        value: string | Timeline;
+      } | null)
+    | ({
+        relationTo: 'values';
+        value: string | Value;
+      } | null)
+    | ({
+        relationTo: 'certifications';
+        value: string | Certification;
+      } | null)
+    | ({
+        relationTo: 'pillars';
+        value: string | Pillar;
+      } | null)
+    | ({
+        relationTo: 'benefits';
+        value: string | Benefit;
+      } | null)
+    | ({
+        relationTo: 'machinery';
+        value: string | Machinery;
+      } | null)
+    | ({
+        relationTo: 'highlights';
+        value: string | Highlight;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'headers';
+        value: string | Header;
+      } | null)
+    | ({
+        relationTo: 'footers';
+        value: string | Footer;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -925,8 +1885,46 @@ export interface TenantsSelect<T extends boolean = true> {
     | T
     | {
         logo?: T;
+        favicon?: T;
         primaryColor?: T;
+        secondaryColor?: T;
         siteName?: T;
+        siteDescription?: T;
+      };
+  locales?: T;
+  defaultLocale?: T;
+  modules?: T;
+  modulesConfig?: T;
+  design?:
+    | T
+    | {
+        style?: T;
+        borderRadius?: T;
+        fontHeading?: T;
+        fontBody?: T;
+      };
+  social?:
+    | T
+    | {
+        facebook?: T;
+        instagram?: T;
+        linkedin?: T;
+        twitter?: T;
+        youtube?: T;
+      };
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+        vatNumber?: T;
+      };
+  analytics?:
+    | T
+    | {
+        googleAnalyticsId?: T;
+        plausibleDomain?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1302,221 +2300,389 @@ export interface RedirectsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-kv_select".
+ * via the `definition` "features_select".
  */
-export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T;
-  data?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-locked-documents_select".
- */
-export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T;
-  globalSlug?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-preferences_select".
- */
-export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T;
-  key?: T;
-  value?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-migrations_select".
- */
-export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T;
-  batch?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
- */
-export interface Header {
-  id: string;
-  logo?: {
-    image?: (string | null) | Media;
-    /**
-     * Logo alternativo per dark mode (opzionale)
-     */
-    darkImage?: (string | null) | Media;
-    /**
-     * Mostrato se non è presente un'immagine logo
-     */
-    text?: string | null;
-    link?: string | null;
-  };
-  /**
-   * Seleziona il menu da mostrare nell'header
-   */
-  navigation?: (string | null) | Menu;
-  cta?: {
-    enabled?: boolean | null;
-    text?: string | null;
-    linkType?: ('internal' | 'external') | null;
-    internalLink?: (string | null) | Page;
-    externalLink?: string | null;
-    style?: ('primary' | 'secondary' | 'outline') | null;
-  };
-  contactInfo?: {
-    showPhone?: boolean | null;
-    phone?: string | null;
-    /**
-     * es. "Chiamaci"
-     */
-    phoneLabel?: string | null;
-    showEmail?: boolean | null;
-    email?: string | null;
-    /**
-     * es. "Scrivici"
-     */
-    emailLabel?: string | null;
-  };
-  socialLinks?: {
-    showSocial?: boolean | null;
-    links?:
-      | {
-          platform:
-            | 'facebook'
-            | 'instagram'
-            | 'twitter'
-            | 'linkedin'
-            | 'youtube'
-            | 'tiktok'
-            | 'pinterest'
-            | 'whatsapp'
-            | 'telegram';
-          url: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  settings?: {
-    /**
-     * L'header rimane fisso durante lo scroll
-     */
-    sticky?: boolean | null;
-    /**
-     * Header trasparente sulla hero (se supportato dal tema)
-     */
-    transparent?: boolean | null;
-    showLanguageSwitcher?: boolean | null;
-    showSearch?: boolean | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
- */
-export interface Footer {
-  id: string;
-  logo?: {
-    image?: (string | null) | Media;
-    text?: string | null;
-    /**
-     * Breve descrizione sotto il logo
-     */
-    description?: string | null;
-  };
-  columns?:
+export interface FeaturesSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  description?: T;
+  icon?: T;
+  image?: T;
+  link?:
+    | T
     | {
-        title: string;
-        /**
-         * Seleziona un menu esistente
-         */
-        menu?: (string | null) | Menu;
-        id?: string | null;
-      }[]
-    | null;
-  contactInfo?: {
-    showContactSection?: boolean | null;
-    title?: string | null;
-    address?: {
-      show?: boolean | null;
-      street?: string | null;
-      city?: string | null;
-      postalCode?: string | null;
-      country?: string | null;
-    };
-    phone?: string | null;
-    email?: string | null;
-    vatNumber?: string | null;
-  };
-  socialLinks?: {
-    showSocial?: boolean | null;
-    title?: string | null;
-    links?:
-      | {
-          platform:
-            | 'facebook'
-            | 'instagram'
-            | 'twitter'
-            | 'linkedin'
-            | 'youtube'
-            | 'tiktok'
-            | 'pinterest'
-            | 'whatsapp'
-            | 'telegram';
-          url: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  newsletter?: {
-    enabled?: boolean | null;
-    title?: string | null;
-    description?: string | null;
-    buttonText?: string | null;
-    placeholderText?: string | null;
-  };
-  cta?: {
-    enabled?: boolean | null;
-    text?: string | null;
-    linkType?: ('internal' | 'external') | null;
-    internalLink?: (string | null) | Page;
-    externalLink?: string | null;
-  };
-  bottomBar?: {
-    /**
-     * Usa {year} per inserire l'anno corrente automaticamente
-     */
-    copyright?: string | null;
-    legalLinks?:
-      | {
-          label: string;
-          linkType?: ('internal' | 'external') | null;
-          internalLink?: (string | null) | Page;
-          externalLink?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    showPaymentIcons?: boolean | null;
-    paymentMethods?:
-      | ('visa' | 'mastercard' | 'amex' | 'paypal' | 'applepay' | 'googlepay' | 'stripe' | 'banktransfer')[]
-      | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+        enabled?: T;
+        text?: T;
+        url?: T;
+      };
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header_select".
+ * via the `definition` "team_select".
  */
-export interface HeaderSelect<T extends boolean = true> {
+export interface TeamSelect<T extends boolean = true> {
+  tenant?: T;
+  name?: T;
+  role?: T;
+  bio?: T;
+  photo?: T;
+  email?: T;
+  phone?: T;
+  social?:
+    | T
+    | {
+        linkedin?: T;
+        twitter?: T;
+        facebook?: T;
+        instagram?: T;
+      };
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stats_select".
+ */
+export interface StatsSelect<T extends boolean = true> {
+  tenant?: T;
+  value?: T;
+  label?: T;
+  description?: T;
+  icon?: T;
+  prefix?: T;
+  suffix?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  tenant?: T;
+  content?: T;
+  author?: T;
+  role?: T;
+  company?: T;
+  avatar?: T;
+  companyLogo?: T;
+  rating?: T;
+  featured?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  icon?: T;
+  image?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  features?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  pricing?:
+    | T
+    | {
+        showPrice?: T;
+        price?: T;
+        priceDescription?: T;
+      };
+  cta?:
+    | T
+    | {
+        text?: T;
+        link?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKeywords?: T;
+        ogImage?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+        structuredData?: T;
+      };
+  order?: T;
+  featured?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq_select".
+ */
+export interface FaqSelect<T extends boolean = true> {
+  tenant?: T;
+  question?: T;
+  answer?: T;
+  category?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "timeline_select".
+ */
+export interface TimelineSelect<T extends boolean = true> {
+  tenant?: T;
+  year?: T;
+  title?: T;
+  description?: T;
+  image?: T;
+  icon?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "values_select".
+ */
+export interface ValuesSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  description?: T;
+  icon?: T;
+  image?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "certifications_select".
+ */
+export interface CertificationsSelect<T extends boolean = true> {
+  tenant?: T;
+  name?: T;
+  description?: T;
+  issuer?: T;
+  year?: T;
+  expirationDate?: T;
+  logo?: T;
+  document?: T;
+  link?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pillars_select".
+ */
+export interface PillarsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  subtitle?: T;
+  description?: T;
+  icon?: T;
+  image?: T;
+  color?: T;
+  link?:
+    | T
+    | {
+        enabled?: T;
+        text?: T;
+        url?: T;
+      };
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "benefits_select".
+ */
+export interface BenefitsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  description?: T;
+  icon?: T;
+  image?: T;
+  highlight?: T;
+  order?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "machinery_select".
+ */
+export interface MachinerySelect<T extends boolean = true> {
+  tenant?: T;
+  name?: T;
+  description?: T;
+  category?: T;
+  manufacturer?: T;
+  model?: T;
+  year?: T;
+  image?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  specifications?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  capabilities?:
+    | T
+    | {
+        capability?: T;
+        id?: T;
+      };
+  order?: T;
+  featured?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "highlights_select".
+ */
+export interface HighlightsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  subtitle?: T;
+  description?: T;
+  type?: T;
+  icon?: T;
+  image?: T;
+  value?: T;
+  badge?: T;
+  link?:
+    | T
+    | {
+        enabled?: T;
+        text?: T;
+        url?: T;
+      };
+  order?: T;
+  featured?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  client?: T;
+  category?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  year?: T;
+  duration?: T;
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  testimonial?:
+    | T
+    | {
+        enabled?: T;
+        quote?: T;
+        author?: T;
+        role?: T;
+      };
+  results?:
+    | T
+    | {
+        metric?: T;
+        label?: T;
+        id?: T;
+      };
+  link?:
+    | T
+    | {
+        enabled?: T;
+        text?: T;
+        url?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKeywords?: T;
+        ogImage?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+        structuredData?: T;
+      };
+  order?: T;
+  featured?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "headers_select".
+ */
+export interface HeadersSelect<T extends boolean = true> {
+  tenant?: T;
+  internalName?: T;
   logo?:
     | T
     | {
@@ -1568,13 +2734,14 @@ export interface HeaderSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
-  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
+ * via the `definition` "footers_select".
  */
-export interface FooterSelect<T extends boolean = true> {
+export interface FootersSelect<T extends boolean = true> {
+  tenant?: T;
+  internalName?: T;
   logo?:
     | T
     | {
@@ -1656,7 +2823,46 @@ export interface FooterSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
-  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents_select".
+ */
+export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-preferences_select".
+ */
+export interface PayloadPreferencesSelect<T extends boolean = true> {
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-migrations_select".
+ */
+export interface PayloadMigrationsSelect<T extends boolean = true> {
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

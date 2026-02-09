@@ -15,7 +15,7 @@ COPY package.json package-lock.json* ./
 RUN npm install --legacy-peer-deps && \
     npm install --os=linux --libc=musl --cpu=x64 @next/swc-linux-x64-musl && \
     rm -rf /app/node_modules/sharp /app/node_modules/next/node_modules/sharp && \
-    npm install --os=linux --libc=musl --cpu=x64 sharp@0.33.5 && \
+    npm install --os=linux --libc=musl --cpu=x64 sharp@0.34.2 && \
     mkdir -p /app/node_modules/next/node_modules && \
     ln -s /app/node_modules/sharp /app/node_modules/next/node_modules/sharp
 

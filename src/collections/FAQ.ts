@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { tenantField } from '../fields/tenantField'
-import { filterByTenant } from '../access/filterByTenant'
+import { filterByTenant, isAuthenticated } from '../access/filterByTenant'
 
 export const FAQ: CollectionConfig = {
   slug: 'faq',
@@ -15,7 +15,7 @@ export const FAQ: CollectionConfig = {
   },
   access: {
     read: filterByTenant,
-    create: filterByTenant,
+    create: isAuthenticated,
     update: filterByTenant,
     delete: filterByTenant,
   },

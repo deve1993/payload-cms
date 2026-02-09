@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const hostname = request.headers.get('host') || ''
-  const url = request.nextUrl.clone()
 
   // Estrai il subdominio
   // Es: cliente1.tuodominio.com -> cliente1

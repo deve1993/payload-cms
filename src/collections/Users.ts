@@ -45,7 +45,8 @@ export const Users: CollectionConfig = {
       name: 'role',
       type: 'select',
       required: true,
-      defaultValue: 'super-admin',
+      defaultValue: 'editor',
+      saveToJWT: true,
       options: [
         { label: 'Super Admin', value: 'super-admin' },
         { label: 'Admin Tenant', value: 'admin' },
@@ -61,6 +62,7 @@ export const Users: CollectionConfig = {
       relationTo: 'tenants',
       required: false,
       hasMany: false,
+      saveToJWT: true,
       admin: {
         description: 'Il cliente/sito a cui appartiene questo utente (non richiesto per Super Admin)',
         condition: (data) => data?.role !== 'super-admin',

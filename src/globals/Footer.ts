@@ -1,12 +1,33 @@
-import type { GlobalConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
+import { tenantField } from '../fields/tenantField'
+import { filterByTenant, isAuthenticated } from '../access/filterByTenant'
 
-export const Footer: GlobalConfig = {
-  slug: 'footer',
-  label: 'Piè di Pagina',
+export const Footers: CollectionConfig = {
+  slug: 'footers',
+  labels: {
+    singular: 'Piè di Pagina',
+    plural: 'Piè di Pagina',
+  },
   admin: {
+    useAsTitle: 'internalName',
     group: 'Configurazione Sito',
+    defaultColumns: ['internalName', 'tenant'],
+  },
+  access: {
+    read: filterByTenant,
+    create: isAuthenticated,
+    update: filterByTenant,
+    delete: filterByTenant,
   },
   fields: [
+    tenantField,
+    {
+      name: 'internalName',
+      type: 'text',
+      required: true,
+      label: 'Nome Interno',
+      defaultValue: 'Footer Principale',
+    },
     {
       name: 'logo',
       type: 'group',

@@ -1,4 +1,4 @@
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
   const robots = `User-agent: *

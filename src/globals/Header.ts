@@ -1,12 +1,33 @@
-import type { GlobalConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
+import { tenantField } from '../fields/tenantField'
+import { filterByTenant, isAuthenticated } from '../access/filterByTenant'
 
-export const Header: GlobalConfig = {
-  slug: 'header',
-  label: 'Testata',
+export const Headers: CollectionConfig = {
+  slug: 'headers',
+  labels: {
+    singular: 'Testata',
+    plural: 'Testate',
+  },
   admin: {
+    useAsTitle: 'internalName',
     group: 'Configurazione Sito',
+    defaultColumns: ['internalName', 'tenant'],
+  },
+  access: {
+    read: filterByTenant,
+    create: isAuthenticated,
+    update: filterByTenant,
+    delete: filterByTenant,
   },
   fields: [
+    tenantField,
+    {
+      name: 'internalName',
+      type: 'text',
+      required: true,
+      label: 'Nome Interno',
+      defaultValue: 'Header Principale',
+    },
     {
       name: 'logo',
       type: 'group',

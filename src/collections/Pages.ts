@@ -1,7 +1,9 @@
 import type { CollectionConfig } from 'payload'
 import { tenantField } from '../fields/tenantField'
-import { filterByTenant } from '../access/filterByTenant'
+import { filterByTenant, isAuthenticated } from '../access/filterByTenant'
 import { seoFields } from '../fields/seoFields'
+import { createEnsureUniqueTenantSlug } from '../hooks/ensureUniqueTenantSlug'
+import { revalidateOnChange } from '../hooks/revalidateOnChange'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -16,9 +18,13 @@ export const Pages: CollectionConfig = {
   },
   access: {
     read: filterByTenant,
-    create: filterByTenant,
+    create: isAuthenticated,
     update: filterByTenant,
     delete: filterByTenant,
+  },
+  hooks: {
+    beforeValidate: [createEnsureUniqueTenantSlug('pages')],
+    afterChange: [revalidateOnChange],
   },
   fields: [
     tenantField,

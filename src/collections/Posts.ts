@@ -1,7 +1,9 @@
 import type { CollectionConfig } from 'payload'
 import { tenantField } from '../fields/tenantField'
-import { filterByTenant } from '../access/filterByTenant'
+import { filterByTenant, isAuthenticated } from '../access/filterByTenant'
 import { seoFields } from '../fields/seoFields'
+import { createEnsureUniqueTenantSlug } from '../hooks/ensureUniqueTenantSlug'
+import { revalidateOnChange } from '../hooks/revalidateOnChange'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -17,7 +19,7 @@ export const Posts: CollectionConfig = {
   },
   access: {
     read: filterByTenant,
-    create: filterByTenant,
+    create: isAuthenticated,
     update: filterByTenant,
     delete: filterByTenant,
   },
@@ -26,6 +28,10 @@ export const Posts: CollectionConfig = {
       autosave: true,
     },
     maxPerDoc: 10,
+  },
+  hooks: {
+    beforeValidate: [createEnsureUniqueTenantSlug('posts')],
+    afterChange: [revalidateOnChange],
   },
   fields: [
     tenantField,

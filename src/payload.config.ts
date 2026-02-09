@@ -1,5 +1,6 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { resendAdapter } from '@payloadcms/email-resend'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -35,8 +36,8 @@ import { Machinery } from './collections/Machinery'
 import { Highlights } from './collections/Highlights'
 import { Projects } from './collections/Projects'
 
-import { Header } from './globals/Header'
-import { Footer } from './globals/Footer'
+import { Headers } from './globals/Header'
+import { Footers } from './globals/Footer'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -106,8 +107,9 @@ export default buildConfig({
     Machinery,
     Highlights,
     Projects,
+    Headers,
+    Footers,
   ],
-  globals: [Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -117,13 +119,35 @@ export default buildConfig({
     url: process.env.DATABASE_URL || '',
   }),
   sharp,
-  plugins: [],
-  // Configurazione email con Resend
-  email: resendAdapter({
-    defaultFromAddress: 'noreply@pixarts.eu',
-    defaultFromName: 'Pixarts CMS',
-    apiKey: process.env.RESEND_API_KEY || '',
-  }),
+  plugins: [
+    ...(process.env.S3_BUCKET
+      ? [
+          s3Storage({
+            collections: { media: { prefix: 'media' } },
+            bucket: process.env.S3_BUCKET,
+            config: {
+              credentials: {
+                accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+              },
+              region: process.env.S3_REGION || 'auto',
+              ...(process.env.S3_ENDPOINT
+                ? { endpoint: process.env.S3_ENDPOINT, forcePathStyle: true }
+                : {}),
+            },
+          }),
+        ]
+      : []),
+  ],
+  ...(process.env.RESEND_API_KEY
+    ? {
+        email: resendAdapter({
+          defaultFromAddress: 'noreply@pixarts.eu',
+          defaultFromName: 'Pixarts CMS',
+          apiKey: process.env.RESEND_API_KEY,
+        }),
+      }
+    : {}),
   // Traduzioni interfaccia admin
   i18n: {
     supportedLanguages: { en, it, cs },
